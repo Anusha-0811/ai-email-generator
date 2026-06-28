@@ -20,7 +20,7 @@ function App() {
   try {
     setLoading(true);
     const response = await axios.post(
-      "http://localhost:5000/generate-email",
+  `${import.meta.env.VITE_API_URL}/generate-email`,
       {
         recipient,
         emailType,
