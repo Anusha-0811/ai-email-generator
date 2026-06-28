@@ -16,8 +16,9 @@ app.get("/", (req, res) => {
     res.send("Server is Running 🚀");
 });
 app.post("/generate-email", async (req, res) => {
+    console.log(req.body);
 
-    const { recipient, emailType, tone, purpose } = req.body;
+   const { recipient, sender, emailType, tone, purpose } = req.body;
 
    try {
 
@@ -28,22 +29,33 @@ Write a complete ${tone} ${emailType} email.
 
 Details:
 Recipient Name: ${recipient}
-Sender Name: Anusha
+Sender Name: ${sender}
 Purpose: ${purpose}
 
 Instructions:
-- Do not use placeholders like [Your Name], [Date], [Job Title], or [Company].
-- Do not ask the user to fill anything.
-- Do not mention any date in the email unless the user explicitly provides one.
-- Generate a complete email with:
-  • Subject
-  • Greeting
-  • Body
-  • Closing
-- Sign the email as "Anusha".
-- Return only the email.
-`;
 
+- Do NOT generate a Subject line.
+- Start directly with the greeting.
+-- Start directly with the greeting.
+- Use these greeting rules strictly:
+  • If the recipient is "HR", "Hiring Manager", "Recruiter", or another official department/role, use "Dear <Recipient>".
+  • If the recipient is a person's name:
+      - Friendly → "Hi <Recipient>,"
+      - Professional → "Hello <Recipient>,"
+      - Formal → "Hello <Recipient>,"
+- Do not use "Dear" for a person's name.
+- Write a natural, professional, and well-structured email.
+- Do not use placeholders like [Your Name], [Recipient], [Date], [Company], or [Job Title].
+- Do not ask the user to fill in any information.
+- Do not mention dates unless the user explicitly provides one.
+- End the email with an appropriate closing such as:
+  • Best regards,
+  • Sincerely,
+  • Thank you,
+  depending on the tone.
+- Sign the email using the Sender Name provided.
+- Return only the email body. Do not include titles, headings, labels, markdown, or any explanation.
+`;
     const result = await model.generateContent(prompt);
 
     const response = result.response.text();

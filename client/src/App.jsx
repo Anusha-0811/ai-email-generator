@@ -4,6 +4,7 @@ import axios from "axios";
 function App() {
 
   const [recipient, setRecipient] = useState("");
+  const [sender, setSender] = useState("");
   const [emailType, setEmailType] = useState("Job Application");
   const [tone, setTone] = useState("Professional");
   const [purpose, setPurpose] = useState("");
@@ -19,15 +20,16 @@ function App() {
 
   try {
     setLoading(true);
-    const response = await axios.post(
+   const response = await axios.post(
   `${import.meta.env.VITE_API_URL}/generate-email`,
-      {
-        recipient,
-        emailType,
-        tone,
-        purpose
-      }
-    );
+  {
+    recipient,
+    sender,
+    emailType,
+    tone,
+    purpose
+  }
+);
 
     setGeneratedEmail(response.data.email);
     setLoading(false);
@@ -48,6 +50,7 @@ function copyEmail() {
 }
 function clearForm() {
   setRecipient("");
+  setSender("");
   setEmailType("Job Application");
   setTone("Professional");
   setPurpose("");
@@ -69,6 +72,15 @@ function clearForm() {
   placeholder="Enter recipient name"
   value={recipient}
   onChange={(e) => setRecipient(e.target.value)}
+/>
+
+<label>👤 Sender Name</label>
+
+<input
+  type="text"
+  placeholder="Enter your name"
+  value={sender}
+  onChange={(e) => setSender(e.target.value)}
 />
 <label>📧 Email Type</label>
 
@@ -118,7 +130,10 @@ function clearForm() {
     <p>
       <strong>Recipient:</strong> {recipient}
     </p>
-
+    
+    <p>
+  <strong>Sender:</strong> {sender}
+</p>
     <p>
       <strong>Email Type:</strong> {emailType}
     </p>
@@ -140,9 +155,6 @@ function clearForm() {
 
     <div className="email-box">
 
-  <div className="email-header">
-    📧 AI Generated Email
-  </div>
 
   <pre>{generatedEmail}</pre>
 
